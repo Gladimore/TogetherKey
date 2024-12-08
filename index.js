@@ -15,7 +15,8 @@ app.use(cors());
 // Authentication rate limiter
 const authLimiter = async (req, res, next) => {
   const ip = req.ip;
-  const authCounts = authLimiter.authCounts || (authLimiter.authCounts = new Map());
+  const authCounts =
+    authLimiter.authCounts || (authLimiter.authCounts = new Map());
   const now = Date.now();
   const max = 5; // Allow 5 incorrect attempts within 5 minutes
   const windowMs = 5 * 60 * 1000;
@@ -56,9 +57,8 @@ app.post("/api", authLimiter, (req, res) => {
   const { password } = req.body;
 
   if (password === API_PASSWORD) {
-    // If password is correct, reset the rate limiter
     authLimiter.reset(req.ip);
-    res.status(200).json(TOGETHER_API_KEY);
+    res.status(200).json({ key: TOGETHER_API_KEY });
   } else {
     res.status(401).json({ error: "Password is incorrect" });
   }
